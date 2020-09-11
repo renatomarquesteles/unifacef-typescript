@@ -5,6 +5,8 @@ import * as bodyParser from 'body-parser';
 // Importa o ClienteController
 // import { ClienteController } from './cliente.controller';
 
+import mongoose = require('mongoose');
+
 import clientRoutes from './routes';
 
 // Cria uma instância do express
@@ -21,8 +23,15 @@ server.use(clientRoutes)
 // Define a porta
 const porta = 3003;
 
-// Sobe o servidor para ficar ouvindo
-server.listen(porta, () => {
-  // Responde o callback
-  console.log(`Servidor ouvindo na porta ${porta}`);
-});
+const uri: string = 'mongodb://localhost:27017';
+
+mongoose
+  .connect(uri)
+  .then(() =>
+    server.listen(porta, () =>
+    console.log(`Servidor ouvindo na porta ${porta}`)
+    )
+  )
+  .catch(error => {
+    throw error;
+  });

@@ -27,4 +27,5 @@ const clientSchema: Schema = new Schema(
   },
 );
 
+// Exporta um model que represento um documento Client no mongoDB
 export default model<IClient>('Client', clientSchema)
