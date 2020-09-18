@@ -7,7 +7,7 @@ import * as bodyParser from 'body-parser';
 
 import mongoose = require('mongoose');
 
-import clientRoutes from './routes';
+import routes from './routes';
 
 // Cria uma instância do express
 const server: express.Application = express();
@@ -18,7 +18,8 @@ server.use(bodyParser.urlencoded({ extended: false }));
 
 // Monta o ClienteController na rota /cliente
 // server.use('/cliente', ClienteController);
-server.use(clientRoutes)
+
+server.use(routes)
 
 // Define a porta
 const porta = 3003;
@@ -26,7 +27,7 @@ const porta = 3003;
 const uri: string = 'mongodb://localhost:27017';
 
 mongoose
-  .connect(uri)
+  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() =>
     server.listen(porta, () =>
     console.log(`Servidor ouvindo na porta ${porta}`)
