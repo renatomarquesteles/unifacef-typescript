@@ -2,8 +2,6 @@
 import * as express from 'express';
 // Importa o bodyParser
 import * as bodyParser from 'body-parser';
-// Importa o ClienteController
-// import { ClienteController } from './cliente.controller';
 
 import mongoose = require('mongoose');
 
@@ -15,9 +13,6 @@ const server: express.Application = express();
 // Configura o servidor com o bodyParser
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: false }));
-
-// Monta o ClienteController na rota /cliente
-// server.use('/cliente', ClienteController);
 
 server.use(routes)
 
