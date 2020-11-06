@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import mongoose = require('mongoose');
-import cors from 'cors';
+const cors = require('cors');
 
 import routes from './routes';
 

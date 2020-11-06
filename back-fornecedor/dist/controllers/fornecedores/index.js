@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addFornecedor = exports.getFornecedores = void 0;
+exports.deleteFornecedor = exports.updateFornecedor = exports.addFornecedor = exports.getFornecedores = void 0;
 const Fornecedor_1 = require("../../models/Fornecedor");
 exports.getFornecedores = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -30,8 +30,45 @@ exports.addFornecedor = (request, response) => __awaiter(void 0, void 0, void 0,
         const newFornecedor = yield fornecedor.save();
         const allFornecedores = yield Fornecedor_1.default.find();
         response.status(201).json({
-            message: 'Fornecedor inserido com sucesso',
+            message: "Fornecedor inserido com sucesso",
             fornecedor: newFornecedor,
+            fornecedores: allFornecedores,
+        });
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.updateFornecedor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Recupera o id do front end
+        const { params: { id }, body } = req;
+        // Atualiza fornecedor com id com o valor que vem do body
+        const updatedFornecedor = yield Fornecedor_1.default.findByIdAndUpdate({ _id: id }, body);
+        // Recupera todos os fornecedores, inclusive contendo o fornecedor atualizado
+        const allFornecedores = yield Fornecedor_1.default.find();
+        // Devolve a resposta
+        res.status(200).json({
+            message: 'Fornecedor atualizado',
+            fornecedor: updatedFornecedor,
+            fornecedores: allFornecedores,
+        });
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.deleteFornecedor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        // Remove o fornecedor com id com o valor que vem do body
+        const deletedFornecedor = yield Fornecedor_1.default.findByIdAndRemove(id);
+        // Recupera todos os fornecedores, menos o fornecedor removido
+        const allFornecedores = yield Fornecedor_1.default.find();
+        // Devolve a resposta
+        res.status(200).json({
+            message: 'Fornecedor removido',
+            fornecedor: deletedFornecedor,
             fornecedores: allFornecedores,
         });
     }

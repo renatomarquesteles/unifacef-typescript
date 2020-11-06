@@ -6,6 +6,7 @@ export default class Fornecedor extends Component {
     super();
 
     this.state = {
+      _id: '',
       razaoSocial: '',
       cnpj: '',
       lista: [],
@@ -31,12 +32,26 @@ export default class Fornecedor extends Component {
       razaoSocial: this.state.razaoSocial,
       cnpj: this.state.cnpj,
     };
-    axios
-      .post('http://localhost:3000/add-fornecedor', fornecedor)
-      .then(resp => {
-        console.log(resp.data)
-        this.carregaLista();
-      });
+    if (this.state._id) {
+      // Atualizar
+      axios
+        .put(`http://localhost:3000/edit-fornecedor/${this.state._id}`, fornecedor)
+        .then(resp => {
+          this.carregaLista();
+        });
+    } else { // Inserir 
+      axios
+        .post('http://localhost:3000/add-fornecedor', fornecedor)
+        .then(resp => {
+          this.carregaLista();
+        });
+    }
+    
+    this.setState({
+      _id: '',
+      razaoSocial: '',
+      cnpj: '',
+    });
   }
 
   carregaLista() {
@@ -49,6 +64,23 @@ export default class Fornecedor extends Component {
       });
   }
 
+  remover(fornecedor) {
+    axios.delete(`http://localhost:3000/delete-fornecedor/${fornecedor._id}`)
+      .then(resp => {
+        this.carregaLista();
+      });
+  }
+
+  atualizar(fornecedor) {
+    const { cnpj, razaoSocial, _id } = fornecedor;
+
+    this.setState({
+      _id,
+      cnpj,
+      razaoSocial,
+    })
+  }
+
   montaConteudoTabela() {
     return this.state.lista.map(fornecedor => {
       return (
@@ -56,10 +88,18 @@ export default class Fornecedor extends Component {
           <td>{fornecedor.cnpj}</td>
           <td>{fornecedor.razaoSocial}</td>
           <td>
-            <button type="button" className="btn btn-danger">
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={() => this.remover(fornecedor)}
+            >
               Remove
             </button>
-            <button type="button" className="btn btn-warning">
+            <button
+              type="button"
+              className="btn btn-warning"
+              onClick={() => this.atualizar(fornecedor)}
+            >
               Atualiza
             </button>
           </td>
